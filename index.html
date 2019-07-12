@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>放大镜</title>
+    <style type="text/css">
+        /* 放大镜div样式 */
+        .fdj{
+            margin: 0 auto;
+            width: 600px;
+            height: 300px;
+            
+        }
+        /* 左右两边的div共有的样式 */
+        .left,.right{
+            width: 300px;
+            height: 300px;
+            float: left;
+            
+        }
+        /* 左边的div样式 */
+        .left{
+            background-image: url("http://photocdn.sohu.com/20150625/Img415612078.jpg");
+            background-size: 100% 100%;
+            position: relative;
+            
+        }
+        /* 右边div的样式 */
+        .right{
+            background-image: url("http://photocdn.sohu.com/20150625/Img415612078.jpg");
+            background-size: 200% 200%;
+            /* 不显示 */
+            display: none;
+        }
+        /* 遮罩的样式 */
+        .zhezhao{
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 0, 0.6);
+            /* 不显示 */
+            display: none;
+            position: absolute;
+            /* 穿透该元素 */
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="fdj">
+        <div class="left">
+                <div class="zhezhao"></div>
+        </div>     
+        <div class="right"></div>
+    </div>
+    
+    <script type="text/javascript">
+        var leftdiv = document.querySelector(".left");
+        var rightdiv = document.querySelector(".right");
+        var zhezhaodiv = document.querySelector(".zhezhao");
+        //当鼠标进入到leftdiv时，显示右边div
+        leftdiv.onmouseenter = function() {
+            rightdiv.style.display = "block";
+            zhezhaodiv.style.display = "block";
+        }
+        //当鼠标离开leftdiv时，不显示右边div
+        leftdiv.onmouseleave = function() {
+            rightdiv.style.display = "none";
+            zhezhaodiv.style.display = "none";
+        }
+
+        //左边div鼠标移动事件，遮罩随着鼠标移动改变位置
+        leftdiv.onmousemove = function(e) {
+            
+            //获取遮罩左上角在leftdiv上的坐标，offsetX和offsetY是鼠标在leftdiv上的坐标
+            var x = e.offsetX - 75;
+            var y = e.offsetY - 75;
+            //不可以让遮罩超出leftdiv的范围
+            if (x<0) {
+                x = 0;
+            }
+            if (x > 150) {
+                x = 150
+            }
+            if (y < 0) {
+                y=0
+            }
+            if (y>150) {
+                y=150;
+            }
+            zhezhaodiv.style.left = x + "px";
+            zhezhaodiv.style.top = y + "px";
+            //鼠标的坐标和遮罩左上角在leftdiv上的坐标
+            console.log("offsexX:"+e.offsetX,"e.offsetY:"+e.offsetY);
+            console.log("X:"+x,"Y:"+y);
+
+            //右边的div
+            rightdiv.style.backgroundPositionX = -2*x + "px";
+            rightdiv.style.backgroundPositionY = -2*y + "px";
+            // background-position的元素的左上角为顶点，xy正方向是朝右朝下的，
+            // 元素左上角要回到精灵图左上角的顶点需要向上和向左偏移，则x和y都是负值，
+            // 所以说使用background-position的值都是负值
+        }
+    </script>
+</body>
+</html>
